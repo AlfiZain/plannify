@@ -14,13 +14,16 @@ export default forwardRef(function TextInput({ type = 'text', className = '', is
     }, [isFocused]);
 
     return (
-        <input
-            {...props}
-            type={type}
-            className={
-                'rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ' + className
-            }
-            ref={localRef}
-        />
+        <div className="mt-2">
+            <input
+                {...props}
+                type={type}
+                className={
+                    'block w-full border border-input bg-background p-2 text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6 ' +
+                    className
+                }
+                ref={localRef}
+            />
+        </div>
     );
 });
