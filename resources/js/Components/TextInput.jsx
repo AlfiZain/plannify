@@ -8,11 +8,16 @@ export default forwardRef(function TextInput(
 
     useImperativeHandle(ref, () => ({
         focus: () => localRef.current?.focus(),
+        reset: () => {
+            if (localRef.current) {
+                localRef.current.value = '';
+            }
+        },
     }));
 
     useEffect(() => {
         if (isFocused) {
-            localRef.current?.focus();
+            input.current.focus();
         }
     }, [isFocused]);
 
@@ -22,7 +27,7 @@ export default forwardRef(function TextInput(
                 {...props}
                 type={type}
                 className={
-                    'block w-full border border-input bg-background p-2 text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6 ' +
+                    'block w-full rounded-md border border-input bg-background p-2 text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6' +
                     className
                 }
                 ref={localRef}

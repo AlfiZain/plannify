@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback } from '@/Components/ui/avatar';
+import { Toaster } from '@/Components/ui/sonner';
 import { Dialog, Transition } from '@headlessui/react';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Fragment, useState } from 'react';
@@ -14,6 +15,7 @@ export default function AppLayout({ children, title }) {
     return (
         <>
             <Head title={title} />
+            <Toaster position="top-center" richColors />
             <div>
                 <Transition.Root show={sidebarOpen} as={Fragment}>
                     <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
