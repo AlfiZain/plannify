@@ -17,7 +17,7 @@ export default forwardRef(function TextInput(
 
     useEffect(() => {
         if (isFocused) {
-            input.current.focus();
+            localRef.current?.focus();
         }
     }, [isFocused]);
 

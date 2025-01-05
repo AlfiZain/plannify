@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { PiHouse, PiLockKeyOpen, PiPlus, PiSquaresFour, PiUser } from 'react-icons/pi';
 
-export default function Sidebar({ auth, url }) {
+export default function Sidebar({ auth, url, workspaces }) {
     return (
         <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -101,17 +101,19 @@ export default function Sidebar({ auth, url }) {
                         </Link>
                     </div>
                     <ul role="list" className="-mx-2 mt-2 space-y-2">
-                        <li>
-                            <Link
-                                href="#"
-                                className="group flex w-full gap-x-3 rounded-md p-3 text-sm font-semibold leading-relaxed tracking-tighter text-foreground hover:bg-gray-100"
-                            >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-foreground bg-white text-[0.625rem] font-medium text-foreground">
-                                    B
-                                </span>
-                                <span className="turncate">Backend Developer</span>
-                            </Link>
-                        </li>
+                        {workspaces.map((workspace, index) => (
+                            <li key={index}>
+                                <Link
+                                    href={route('workspaces.show', [workspace])}
+                                    className="group flex w-full gap-x-3 rounded-md p-3 text-sm font-semibold leading-relaxed tracking-tighter text-foreground hover:bg-gray-100"
+                                >
+                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-foreground bg-white text-[0.625rem] font-medium text-foreground">
+                                        {workspace.name.substring(0, 1)}
+                                    </span>
+                                    <span className="turncate">{workspace.name}</span>
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </li>
                 <li className="-mx-6 mt-auto">

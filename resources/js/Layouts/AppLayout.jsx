@@ -11,6 +11,7 @@ export default function AppLayout({ children, title }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const auth = usePage().props.auth.user;
     const { url } = usePage();
+    const workspaces = usePage().props.workspaces;
 
     return (
         <>
@@ -63,7 +64,7 @@ export default function AppLayout({ children, title }) {
                                         </div>
                                     </Transition.Child>
                                     {/* Sidebar Responsive */}
-                                    <SidebarResponsive auth={auth} url={url} />
+                                    <SidebarResponsive auth={auth} url={url} workspaces={workspaces} />
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
@@ -81,7 +82,7 @@ export default function AppLayout({ children, title }) {
                             </Link>
                         </div>
                         {/* Sidebar */}
-                        <Sidebar auth={auth} url={url} />
+                        <Sidebar auth={auth} url={url} workspaces={workspaces} />
                     </div>
                 </div>
 
