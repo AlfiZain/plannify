@@ -42,7 +42,6 @@ export default function Create({ page_settings, visibilities }) {
         if (fileInputLogo.current) {
             fileInputLogo.current.reset();
         }
-        setData('visibility', data.visibility);
     };
 
     return (

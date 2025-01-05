@@ -21,7 +21,7 @@ class Workspace extends Model
         'visibility',
     ];
 
-    protected function cast(): array
+    protected function casts(): array
     {
         return [
             'visibility' => WorkspaceVisibillity::class,

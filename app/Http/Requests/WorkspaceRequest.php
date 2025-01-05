@@ -55,7 +55,6 @@ class WorkspaceRequest extends FormRequest
                 ]),
             ],
             'visibility' => [
-                'required',
                 new Enum(WorkspaceVisibillity::class),
             ]
         ];

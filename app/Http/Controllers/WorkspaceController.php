@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\WorkspaceVisibillity;
 use App\Http\Requests\WorkspaceRequest;
+use App\Http\Resources\WorkspaceResource;
+use App\Models\Workspace;
 use App\Traits\HasFile;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 
@@ -24,9 +27,9 @@ class WorkspaceController extends Controller
         ]);
     }
 
-    public function store(WorkspaceRequest $request)
+    public function store(WorkspaceRequest $request): RedirectResponse
     {
-        $request->user()->workspaces()->create(
+        $workspace = $request->user()->workspaces()->create(
             [
                 'name' => $name = $request->input('name'),
                 'slug' => str()->slug($name . str()->uuid(10)),
@@ -38,6 +41,13 @@ class WorkspaceController extends Controller
 
         flashMessage('Workspace information saved successfully');
 
-        return back();
+        return to_route('workspaces.show', $workspace);
+    }
+
+    public function show(Workspace $workspace): Response
+    {
+        return inertia(component: 'Workspaces/Show', props: [
+            'workspace' => fn() => new WorkspaceResource($workspace),
+        ]);
     }
 }
