@@ -50,4 +50,33 @@ class WorkspaceController extends Controller
             'workspace' => fn() => new WorkspaceResource($workspace),
         ]);
     }
+
+    public function edit(Workspace $workspace): Response
+    {
+        return inertia(component: 'Workspaces/Setting', props: [
+            'workspace' => fn() => new WorkspaceResource($workspace),
+            'page_settings' => [
+                'title' => 'Edit Workspace',
+                'subtitle' => 'Fill out this form to edit workspace',
+                'method' => 'PUT',
+                'action' => route('workspaces.update', $workspace),
+            ],
+            'visibilities' => WorkspaceVisibillity::option(),
+        ]);
+    }
+
+    public function update(Workspace $workspace, WorkspaceRequest $request): RedirectResponse
+    {
+        $workspace->update([
+            'name' => $name = $request->input('name'),
+            'slug' => str()->slug($name . str()->uuid(10)),
+            'cover' => $request->hasFile('cover') ? $this->upload_file($request, 'cover', 'workspaces/cover') : $workspace->cover,
+            'logo' => $request->hasFile('logo') ? $this->upload_file($request, 'logo', 'workspaces/logo') : $workspace->logo,
+            'visibility' => $request->visibility,
+        ]);
+
+        flashMessage('Succesfully update workspace');
+
+        return to_route('workspaces.show', $workspace);
+    }
 }
