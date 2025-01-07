@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\WorkspaceVisibillity;
 use App\Http\Requests\WorkspaceRequest;
 use App\Http\Resources\WorkspaceResource;
+use App\Models\Member;
 use App\Models\User;
 use App\Models\Workspace;
 use App\Traits\HasFile;
@@ -114,5 +115,23 @@ class WorkspaceController extends Controller
 
         flashMessage('Member succesfully invited');
         return back();
+    }
+
+    public function member_destroy(Workspace $workspace, Member $member): RedirectResponse
+    {
+        $member->delete();
+        flashMessage('Member succesfully deleted');
+        return back();
+    }
+
+    public function destroy(Workspace $workspace): RedirectResponse
+    {
+        $this->delete_file($workspace, 'cover');
+        $this->delete_file($workspace, 'logo');
+        $workspace->members()->delete();
+        $workspace->delete;
+
+        flashMessage('The workspace has been succesfully deleted');
+        return to_route('dashboard');
     }
 }

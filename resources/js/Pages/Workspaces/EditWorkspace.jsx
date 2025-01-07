@@ -5,7 +5,7 @@ import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import { flashMessage } from '@/lib/utils';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import { toast } from 'sonner';
 
 export default function EditWorkspace({ workspace, page_settings, visibilities }) {
@@ -96,13 +96,37 @@ export default function EditWorkspace({ workspace, page_settings, visibilities }
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center justify-end gap-x-2 py-6">
-                        <Button type="button" variant="ghost" onClick={() => reset()}>
-                            Reset
+                    <div className="flex items-center justify-between gap-x-2 py-6">
+                        <Button
+                            type="button"
+                            variant="link"
+                            className="font-medium text-red-500 hover:text-red-600 hover:no-underline"
+                            onClick={() => {
+                                router.delete(
+                                    route('workspaces.destroy', {
+                                        workspace: workspace,
+                                    }),
+                                    {
+                                        preserveScroll: true,
+                                        preserveState: true,
+                                        onSuccess: (success) => {
+                                            const flash = flashMessage(success);
+                                            if (flash) toast[flash.type](flash.message);
+                                        },
+                                    },
+                                );
+                            }}
+                        >
+                            Delete Workspace
                         </Button>
-                        <Button variant="red" type="submit" disabled={processing}>
-                            Save
-                        </Button>
+                        <div className="flex gap-x-2">
+                            <Button type="button" variant="ghost" onClick={() => reset()}>
+                                Reset
+                            </Button>
+                            <Button variant="red" type="submit" disabled={processing}>
+                                Save
+                            </Button>
+                        </div>
                     </div>
                 </form>
             </CardContent>

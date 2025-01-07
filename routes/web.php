@@ -26,7 +26,7 @@ Route::controller(WorkspaceController::class)->group(function () {
     Route::put('workspaces/edit/{workspace:slug}', 'update')->name('workspaces.update');
     Route::delete('workspaces/destroy/{workspace:slug}', 'destroy')->name('workspaces.destroy');
     Route::post('workspaces/member/{workspace:slug}/store', 'member_store')->name('workspaces.member_store');
-    Route::delete('workspaces/member/{workspace:slug}/destroy', 'member_destroy')->name('workspaces.member_destroy');
+    Route::delete('workspaces/member/{workspace}/destroy/{member}', 'member_destroy')->name('workspaces.member_destroy');
 });
 
 Route::middleware('auth')->group(function () {
