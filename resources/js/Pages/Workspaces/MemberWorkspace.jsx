@@ -1,6 +1,7 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
+import { Avatar, AvatarFallback, AvatarImage } from '@/Components/ui/avatar';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent } from '@/Components/ui/card';
 import { flashMessage } from '@/lib/utils';
@@ -8,7 +9,7 @@ import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { toast } from 'sonner';
 
-export default function MemberWorkspace({ action }) {
+export default function MemberWorkspace({ action, members }) {
     const { data, setData, processing, errors, reset, post, recentlySuccessful } = useForm({
         email: '',
     });
@@ -66,6 +67,37 @@ export default function MemberWorkspace({ action }) {
                         </Transition>
                     </div>
                 </form>
+                <div className="space-y-4 py-6">
+                    <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
+                        {members.map((member, index) => (
+                            <li
+                                className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-relaxed"
+                                key={index}
+                            >
+                                <div className="flex w-0 flex-1 items-center">
+                                    <Avatar>
+                                        <AvatarImage src={member.user.avatar} />
+                                        <AvatarFallback>{member.user.name.substring(0, 1)}</AvatarFallback>
+                                    </Avatar>
+                                    <div className="ml-4 flex min-w-0 flex-col">
+                                        <span className="truncate font-medium">{member.user.name}</span>
+                                        <span className="hidden text-muted-foreground sm:block">
+                                            {member.user.email}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="ml-4 flex-shrink-0">
+                                    <Button
+                                        variant="link"
+                                        className="font-medium text-red-500 hover:text-red-600 hover:no-underline"
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </CardContent>
         </Card>
     );

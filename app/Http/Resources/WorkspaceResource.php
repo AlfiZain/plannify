@@ -22,6 +22,7 @@ class WorkspaceResource extends JsonResource
             'visibility' => $this->visibility->value,
             'cover' => Storage::url($this->cover),
             'logo' => Storage::url($this->logo),
+            'members' => MemberResource::collection($this->members),
         ];
     }
 }
