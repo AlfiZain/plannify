@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\CardStatus;
 use App\Enums\WorkspaceVisibillity;
 use App\Http\Requests\WorkspaceRequest;
+use App\Http\Resources\CardResource;
 use App\Http\Resources\WorkspaceResource;
 use App\Models\Member;
 use App\Models\User;
@@ -54,7 +56,18 @@ class WorkspaceController extends Controller
     public function show(Workspace $workspace): Response
     {
         return inertia(component: 'Workspaces/Show', props: [
+            'cards' => fn() => CardResource::collection($workspace->load([
+                'cards' => fn($query) => $query->withCount(['tasks', 'members', 'attachments'])->with([
+                    'attachments',
+                    'members',
+                    'tasks' => fn($task) => $task->withCount('children'),
+                ])->orderBy('order')
+            ])->cards),
             'workspace' => fn() => new WorkspaceResource($workspace),
+            'page_settings' => [
+                'title' => $workspace->name,
+            ],
+            'statuses' => fn() => CardStatus::option(),
         ]);
     }
 

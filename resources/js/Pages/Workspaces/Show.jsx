@@ -1,9 +1,13 @@
-import { CardTitle } from '@/Components/ui/card';
+import GetPriorityBadge from '@/Components/GetPriorityBadge';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import AppLayout from '@/Layouts/AppLayout';
 import { Link } from '@inertiajs/react';
+import { PiPlus } from 'react-icons/pi';
 
 export default function Show({ ...props }) {
     const workspace = props.workspace;
+    const statuses = props.statuses;
+    const cards = props.cards;
 
     return (
         <>
@@ -42,6 +46,59 @@ export default function Show({ ...props }) {
                     </div>
                 </div>
                 {/* Card */}
+                <div className="mt-8 flex w-full flex-col justify-start gap-x-5 gap-y-8 sm:flex-row">
+                    {statuses.map((status, index) => (
+                        <div className="w-full space-y-4 sm:w-1/4" key={index}>
+                            <div className="flex items-center justify-between">
+                                <span className="text-base font-semibold leading-relaxed tracking-tighter">
+                                    {status.value}
+                                </span>
+                                <div className="flex items-center gap-x-3">
+                                    <Link
+                                        href={route('cards.create', {
+                                            workspace: workspace,
+                                            _query: {
+                                                status: status.value,
+                                            },
+                                        })}
+                                    >
+                                        <PiPlus className="h-4 w-4 text-foreground transition-colors duration-200 hover:text-red-500"></PiPlus>
+                                    </Link>
+                                </div>
+                            </div>
+                            {/* Column Card Container */}
+                            <div className="flex flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-2">
+                                {cards
+                                    .filter((card) => card.status === status.value)
+                                    .map((card, index) => (
+                                        <Card
+                                            key={index}
+                                            className="relative rounded-xl hover:ring-2 hover:ring-inset hover:ring-red-500"
+                                        >
+                                            <CardHeader>
+                                                <div className="flex items-center justify-between gap-x-4">
+                                                    <CardTitle className="line-clamp-2 text-base leading-relaxed tracking-tighter">
+                                                        <Link
+                                                            href={route('cards.show', [workspace, card])}
+                                                            className="hover:text-red-500"
+                                                        >
+                                                            {card.title}
+                                                        </Link>
+                                                    </CardTitle>
+                                                </div>
+                                                <div>
+                                                    <GetPriorityBadge priority={card.priority} />
+                                                </div>
+                                                <CardDescription className="line-clamp-4 leading-relaxed tracking-tighter">
+                                                    {card.description}
+                                                </CardDescription>
+                                            </CardHeader>
+                                        </Card>
+                                    ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
