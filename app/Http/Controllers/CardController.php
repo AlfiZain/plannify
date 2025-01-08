@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\CardPriority;
 use App\Enums\CardStatus;
 use App\Http\Requests\CardRequest;
+use App\Http\Resources\CardSingleResource;
 use App\Models\Card;
 use App\Models\Workspace;
 use Illuminate\Http\RedirectResponse;
@@ -57,5 +58,16 @@ class CardController extends Controller
 
         if (!$lastCard) return 1;
         return $lastCard->order + 1;
+    }
+
+    public function show(Workspace $workspace, Card $card): Response
+    {
+        return inertia('Cards/Show', [
+            'card' => fn() => new CardSingleResource($card->load(['members', 'user', 'tasks', 'attachments'])),
+            'page_settings' => [
+                'title' => 'Detail Card',
+                'subtitle' => 'Detail Card Information',
+            ],
+        ]);
     }
 }
