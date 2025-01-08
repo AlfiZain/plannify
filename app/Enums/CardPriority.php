@@ -5,7 +5,7 @@ namespace App\Enums;
 enum CardPriority: string
 {
     case URGENT = 'urgent';
-    case High = 'High';
+    case HIGH = 'High';
     case MEDIUM = 'Medium';
     case LOW = 'Low';
     case UNKNOWN = 'Unknown';
