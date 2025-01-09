@@ -1,14 +1,18 @@
+import { ActionDialog } from '@/Components/ActionDialog';
 import GetPriorityBadge from '@/Components/GetPriorityBadge';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/Components/ui/dropdown-menu';
 import AppLayout from '@/Layouts/AppLayout';
-import { Link } from '@inertiajs/react';
+import { flashMessage } from '@/lib/utils';
+import { Link, router } from '@inertiajs/react';
 import { PiDotsThreeOutlineFill, PiPlus } from 'react-icons/pi';
+import { toast } from 'sonner';
 
 export default function Show({ ...props }) {
     const workspace = props.workspace;
@@ -101,6 +105,36 @@ export default function Show({ ...props }) {
                                                                     Edit
                                                                 </Link>
                                                             </DropdownMenuItem>
+                                                            <DropdownMenuGroup>
+                                                                <ActionDialog
+                                                                    trigger={
+                                                                        <DropdownMenuItem
+                                                                            className="hover:cursor-pointer"
+                                                                            onSelect={(e) => e.preventDefault()}
+                                                                        >
+                                                                            Delete
+                                                                        </DropdownMenuItem>
+                                                                    }
+                                                                    title="Delete Card"
+                                                                    description="Are you sure want to delete this card?"
+                                                                    action={() => {
+                                                                        router.delete(
+                                                                            route('cards.destroy', [workspace, card]),
+                                                                            {
+                                                                                preserveScroll: true,
+                                                                                preserveState: true,
+                                                                                onSuccess: (success) => {
+                                                                                    const flash = flashMessage(success);
+                                                                                    if (flash)
+                                                                                        toast[flash.type](
+                                                                                            flash.message,
+                                                                                        );
+                                                                                },
+                                                                            },
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </DropdownMenuGroup>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>
                                                 </div>

@@ -93,6 +93,16 @@ class CardController extends Controller
         return back();
     }
 
+    public function destroy(Workspace $workspace, Card $card): RedirectResponse
+    {
+        $last_status = $card->status->value;
+        $card->delete();
+
+        $this->adjustOrdering($workspace, $last_status);
+        flashMessage('Successfully deleted card');
+        return to_route('workspaces.show', $workspace);
+    }
+
     public function ordering(Workspace $workspace, string $status): int
     {
         $lastCard = Card::query()
