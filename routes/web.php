@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberCardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Foundation\Application;
@@ -38,6 +39,10 @@ Route::controller(CardController::class)->group(function () {
     Route::put('cards/{workspace:slug}/edit/{card}', 'update')->name('cards.update');
     Route::post('cards/{workspace:slug}/{card}/reorder', 'reorder')->name('cards.reorder');
     Route::delete('cards/{workspace:slug}/destroy/{card}', 'destroy')->name('cards.destroy');
+})->middleware('auth');
+
+Route::controller(MemberCardController::class)->group(function () {
+    Route::post('cards/member/{card}/store', 'member_store')->name('member_card.store');
 })->middleware('auth');
 
 Route::middleware('auth')->group(function () {
